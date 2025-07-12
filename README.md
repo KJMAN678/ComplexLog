@@ -107,3 +107,12 @@ $ docker compose -f docker-compose.ubuntu.yaml run --rm backend uv run django-ad
 $ docker compose -f docker-compose.ubuntu.yaml run --rm backend uv run python app/manage.py makemigrations
 $ docker compose -f docker-compose.ubuntu.yaml run --rm backend uv run python app/manage.py migrate
 ```
+
+- データ作成
+```sh
+# ローカルM1Mac用
+$ docker compose -f docker-compose.mac.yaml run --rm backend uv run python app/manage.py create_blog_data 100
+
+# Devin用
+$ docker compose -f docker-compose.ubuntu.yaml run --rm backend uv run python app/manage.py create_blog_data 100
+```
