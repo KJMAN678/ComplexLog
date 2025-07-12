@@ -60,21 +60,21 @@ export default function Page() {
     }
   };
 
-  const syncBlogs = async () => {
-    try {
-      const response = await fetch('http://localhost:8000/api/sync-blogs');
-      const data = await response.json();
+  // const syncBlogs = async () => {
+  //   try {
+  //     const response = await fetch('http://localhost:8000/api/sync-blogs');
+  //     const data = await response.json();
       
-      if (data.status === 'success') {
-        alert('ブログデータをOpenSearchに同期しました');
-      } else {
-        alert('同期エラー: ' + data.message);
-      }
-    } catch (err) {
-      alert('同期API呼び出しエラーが発生しました');
-      console.error('Sync error:', err);
-    }
-  };
+  //     if (data.status === 'success') {
+  //       alert('ブログデータをOpenSearchに同期しました');
+  //     } else {
+  //       alert('同期エラー: ' + data.message);
+  //     }
+  //   } catch (err) {
+  //     alert('同期API呼び出しエラーが発生しました');
+  //     console.error('Sync error:', err);
+  //   }
+  // };
 
   return (
     <div style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
@@ -142,7 +142,7 @@ export default function Page() {
             {loading ? '検索中...' : '検索'}
           </button>
 
-          <button
+          {/* <button
             onClick={syncBlogs}
             style={{
               padding: '10px 20px',
@@ -155,7 +155,7 @@ export default function Page() {
             }}
           >
             ブログデータ同期
-          </button>
+          </button> */}
         </div>
 
         {error && (
