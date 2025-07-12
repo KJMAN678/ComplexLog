@@ -1,0 +1,94 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.mac
+    volumes:
+      - ./frontend:/app/frontend
+      - /app/frontend/node_modules
+      - playwright_browsers:/root/.cache/ms-playwright
+    ports:
+      - "3000:3000"
+    command: npm run build-and-dev
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./backend
+    volumes:
+      - ./backend:/app/backend
+    ports:
+      - "8000:8000"
+    environment:
+      - "DJANGO_SUPERUSER_PASSWORD=${DJANGO_SUPERUSER_PASSWORD}"
+      - "DJANGO_SUPERUSER_USERNAME=${DJANGO_SUPERUSER_USERNAME}"
+      - "DJANGO_SUPERUSER_EMAIL=${DJANGO_SUPERUSER_EMAIL}"
+      - "OPENSEARCH_INITIAL_ADMIN_PASSWORD=${OPENSEARCH_INITIAL_ADMIN_PASSWORD}"
+    command: sh /app/backend/start.sh
+    depends_on:
+      - db
+    networks:
+      - opensearch-net
+
+  db:
+    image: postgres:17.5-alpine3.21
+    ports:
+        - "5432"
+    environment:
+      - "POSTGRES_DB=postgres"
+      - "POSTGRES_USER=postgres"
+      - "POSTGRES_PASSWORD=postgres"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - opensearch-net
+
+  opensearch:
+    build:
+      context: ./opensearch
+    container_name: opensearch
+    environment:
+      discovery.type: single-node
+      OPENSEARCH_JAVA_OPTS: -Xms512m -Xmx512m
+      path.repo: /usr/share/opensearch/config/backup
+      OPENSEARCH_INITIAL_ADMIN_USERNAME: admin
+      OPENSEARCH_INITIAL_ADMIN_PASSWORD: ${OPENSEARCH_INITIAL_ADMIN_PASSWORD}
+      DISABLE_INSTALL_DEMO_CONFIG: false
+    volumes:
+      - ./opensearch/backup:/usr/share/opensearch/config/backup
+    ulimits:
+      memlock:
+        soft: -1 # Set memlock to unlimited (no soft or hard limit)
+        hard: -1
+    ports:
+      - 9200:9200
+    networks:
+      - opensearch-net
+
+
+  opensearch-dashboards:
+    image: opensearchproject/opensearch-dashboards:2.17.1
+    container_name: opensearch-dashboards
+    ports:
+      - 5601:5601
+    expose:
+      - "5601"
+    environment:
+      OPENSEARCH_HOSTS: "https://opensearch:9200"
+      OPENSEARCH_USERNAME: admin
+      OPENSEARCH_PASSWORD: ${OPENSEARCH_INITIAL_ADMIN_PASSWORD}
+    networks:
+      - opensearch-net
+
+volumes:
+  playwright_browsers:
+
+networks:
+    # This network is used to connect the opensearch and opensearch-dashboards services,
+    # allowing communication between them. It utilizes a bridge driver for network isolation.
+  opensearch-net:
+    driver: bridge
