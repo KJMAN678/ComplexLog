@@ -28,7 +28,10 @@ services:
       - "BACKEND_URL=${BACKEND_URL}"
     command: sh /app/backend/start.sh
     depends_on:
-      - db
+      opensearch:
+        condition: service_healthy
+      db:
+        condition: service_healthy
     networks:
       - opensearch-net
 
@@ -52,6 +55,12 @@ services:
     build:
       context: ./opensearch
     container_name: opensearch
+    healthcheck:
+      test: ["CMD-SHELL", "curl -k -u admin:$$OPENSEARCH_INITIAL_ADMIN_PASSWORD https://localhost:9200/_cluster/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
     environment:
       discovery.type: single-node
       OPENSEARCH_JAVA_OPTS: -Xms512m -Xmx512m
@@ -89,7 +98,5 @@ volumes:
   playwright_browsers:
 
 networks:
-    # This network is used to connect the opensearch and opensearch-dashboards services,
-    # allowing communication between them. It utilizes a bridge driver for network isolation.
   opensearch-net:
     driver: bridge

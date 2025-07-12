@@ -5,4 +5,3 @@ COPY --from=ghcr.io/astral-sh/uv:0.7.19 /uv /bin/uv
 WORKDIR /app/backend
 COPY . /app/backend
 RUN uv sync --dev
-RUN apt-get update && apt-get install -y curl
