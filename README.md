@@ -16,6 +16,7 @@ export DJANGO_SUPERUSER_USERNAME=xxx
 export DJANGO_SUPERUSER_EMAIL=xxx@xxx.com
 export DJANGO_SUPERUSER_PASSWORD=xxx
 export OPENSEARCH_INITIAL_ADMIN_PASSWORD=xxx
+export BACKEND_URL=http://localhost:8000
 
 # 環境変数を読み込む
 $ direnv allow
@@ -31,6 +32,11 @@ $ brew install direnv
 $ docker compose -f docker-compose.mac.yaml up -d
 # Devin用
 $ docker compose -f docker-compose.ubuntu.yaml up -d
+
+
+# コンテナ作り直し
+$ ./remake-container.sh mac
+$ ./remake-container.sh ubuntu
 ```
 
 #### 5.SetUp Lint
