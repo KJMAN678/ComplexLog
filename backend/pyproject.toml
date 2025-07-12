@@ -10,7 +10,8 @@ dependencies = [
     "django-ninja==1.4.3",
     "Markdown==3.8",
     "django-filter==25.1",
-    "django-cors-headers==4.7.0"
+    "django-cors-headers==4.7.0",
+    "opensearch-py==2.7.1"
 ]
 
 [tool.uv]

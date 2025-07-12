@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "config",
     "debug_toolbar",
+    "api",
 ]
 
 MIDDLEWARE = [
