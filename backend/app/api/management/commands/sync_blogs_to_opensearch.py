@@ -59,4 +59,4 @@ class Command(BaseCommand):
             self.stdout.write(
                 self.style.ERROR(f'Error syncing blogs to OpenSearch: {str(e)}')
             )
-            raise
+            return
