@@ -125,6 +125,7 @@ $ docker compose -f docker-compose.ubuntu.yaml run --rm backend uv run python ap
 
 ### OpenSearch サンプルログ
 
+<details><summary>OpenSearch サンプルログ</summary>
 ```sh
 {
   "query": {
@@ -238,3 +239,17 @@ $ docker compose -f docker-compose.ubuntu.yaml run --rm backend uv run python ap
   }
 }
 ```
+</details>
+
+### 参考文献
+
+#### Docker Compose
+- [Compose Build Specification](https://docs.docker.com/compose/compose-file/build)
+- [Compose で起動とシャットダウンの順序を制御する](https://docs.docker.com/compose/startup-order/)
+  - Health Check
+    - [docker-compose-healthcheck](https://github.com/peter-evans/docker-compose-healthcheck/blob/master/README.md)
+    - [OpenSearch Cluster health](http://docs.opensearch.org/docs/latest/api-reference/cluster-api/cluster-health/)
+    - [PostgreSQL pg_isready](https://www.postgresql.org/docs/9.4/app-pg-isready.html)
+- Network
+  - [Compose networks](https://docs.docker.com/compose/networks/)
+  - [Compose volumes](https://docs.docker.com/compose/volumes/)
